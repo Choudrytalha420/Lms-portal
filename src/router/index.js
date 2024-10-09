@@ -1,25 +1,94 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+// router/index.js
+import { createRouter, createWebHistory } from "vue-router";
+import LoginPage from "@/components/loginPage.vue";
+import RegistrationForm from "@/components/registrationForm.vue";
+import MainDashboard from "@/components/mainDashboard.vue";
+import StudentRequests from "@/components/studentRequests.vue";
+import AddManager from "@/components/addManager.vue";
+import AssignQuiz from "@/components/assignQuiz.vue";
+import ViewAllQuiz from "@/components/viewAllQuiz.vue";
+import ForgotPassword from "@/components/forgotPassword.vue";
+import AttemptQuiz from "@/components/attemptQuiz.vue";
+import ViewQuizResult from "@/components/viewQuizResult.vue";
+import CreateQuiz from "@/components/createQuiz.vue";
+import StudentAssignQuiz from "@/components/studentAssignQuiz.vue";
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView
+    path: "/",
+    name: "login",
+    component: LoginPage,
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
-]
+    path: "/registrationForm",
+    name: "registrationForm",
+    component: RegistrationForm,
+  },
+  {
+    path: "/forgotPassword",
+    name: "forgotPassword",
+    component: ForgotPassword,
+  },
+  {
+    path: "/attemptQuiz",
+    name: "attemptQuiz",
+    component: AttemptQuiz,
+  },
+  {
+    path: "/mainDashboard",
+    name: "mainDashboard",
+    component: MainDashboard,
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: "studentRequests",
+        name: "studentRequests",
+        component: StudentRequests,
+        meta: { roles: ["admin", "manager", "supervisor"] },
+      },
+      {
+        path: "addManager",
+        name: "addManager",
+        component: AddManager,
+        meta: { roles: ["admin"] },
+      },
+      {
+        path: "assignQuiz",
+        name: "assignQuiz",
+        component: AssignQuiz,
+        meta: { roles: ["admin", "manager"] },
+      },
+      {
+        path: "viewAllQuiz",
+        name: "viewAllQuiz",
+        component: ViewAllQuiz,
+        meta: { roles: ["student"] },
+      },
+      {
+        path: "viewQuizResult",
+        name: "viewQuizResult",
+        component: ViewQuizResult,
+        meta: { roles: ["admin", "manager", "supervisor", "student"] },
+      },
+      {
+        path: "createQuiz",
+        name: "createQuiz",
+        component: CreateQuiz,
+        meta: { roles: ["admin", "manager", "supervisor"] },
+      },
+      {
+        path: "studentAssignQuiz",
+        name: "studentAssignQuiz",
+        component: StudentAssignQuiz,
+        meta: { roles: ["student"] },
+      },
+    ],
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
